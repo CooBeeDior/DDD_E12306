@@ -1,0 +1,245 @@
+﻿using E12306.Common;
+using E12306.Common.Enum;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+
+namespace E12306.Domain
+{
+    /// <summary>
+    /// 聚合根
+    /// </summary>
+    [Table("CustomerInfo")]
+    public class CustomerInfo : AggregateRoot
+    {
+        //public CustomerInfo()
+        //{
+
+        //}
+        public CustomerInfo(string Name) : this(Name, null)
+        {
+
+        }
+
+        public CustomerInfo(string Name, string PhoneNumber) : this(Name, null, null)
+        {
+
+        }
+
+        public CustomerInfo(string Name, string PhoneNumber, string IdCard) : this(Name, null, null, null)
+        {
+
+        }
+
+        public CustomerInfo(string Name, string PhoneNumber, string IdCard, IList<UserContract> UserContracts)
+        {
+            Id = Guid.NewGuid();
+            this.Name = Name;
+            this.PhoneNumber = PhoneNumber;
+            this.IdCard = IdCard;
+            this.TrainOrders = new List<TrainOrder>(); ;
+            this.UserContracts = UserContracts ?? new List<UserContract>();
+
+            Version = 0;
+            AddTime = DateTimeOffset.Now;
+            UpdateTime = DateTimeOffset.Now;
+            AddUserId = UserHelper.User.Id;
+            UpdateUserId = UserHelper.User.Id;
+        }
+
+
+        public string Name { get; private set; }
+
+        public string PhoneNumber { get; private set; }
+
+        public string IdCard { get; private set; }
+
+        public IList<TrainOrder> TrainOrders { get; private set; }
+
+        public IList<UserContract> UserContracts { get; private set; }
+
+
+        public void AddUserContract(UserContract UserContract)
+        {
+            UserContracts.Add(UserContract);
+        }
+
+        public void RemoveUserContracts(UserContract UserContract)
+        {
+            UserContracts.Remove(UserContract);
+        }
+
+        public (bool, string, TrainOrder) BookTrainTicket(TrainShift TrainShift, TrainStation StartTrainStation, TrainStation EndTrainStation, SeatTypeConfig SeatType, CustomerInfo CustomerInfo, UserContract UserContract)
+        {
+            return BookTrainTicket(TrainShift, StartTrainStation, EndTrainStation, new List<SeatTypeConfig> { SeatType }, CustomerInfo, UserContract);
+        }
+        public (bool, string, TrainOrder) BookTrainTicket(TrainShift TrainShift, TrainStation StartTrainStation, TrainStation EndTrainStation, IList<SeatTypeConfig> SeatTypes, CustomerInfo CustomerInfo, UserContract UserContract)
+        {
+            return BookTrainTicket(TrainShift, StartTrainStation, EndTrainStation, SeatTypes, CustomerInfo, new List<UserContract>() { UserContract });
+        }
+        public (bool, string, TrainOrder) BookTrainTicket(TrainShift TrainShift, TrainStation StartTrainStation, TrainStation EndTrainStation, SeatTypeConfig SeatType, CustomerInfo CustomerInfo, IList<UserContract> UserContracts)
+        {
+            return BookTrainTicket(TrainShift, StartTrainStation, EndTrainStation, new List<SeatTypeConfig> { SeatType }, CustomerInfo, UserContracts);
+        }
+
+        public (bool, string, TrainOrder) BookTrainTicket(TrainShift TrainShift, TrainStation StartTrainStation, TrainStation EndTrainStation, IList<SeatTypeConfig> SeatTypes, CustomerInfo CustomerInfo, IList<UserContract> UserContracts)
+        {
+            if (StartTrainStation == null)
+            {
+                throw new ArgumentNullException("StartTrainStation");
+            }
+            if (!StartTrainStation.IsSale)
+            {
+                throw new ArgumentNullException($"{StartTrainStation} is Not Sale");
+            }
+            if (EndTrainStation == null)
+            {
+                throw new ArgumentNullException("EndTrainStation");
+            }
+            if (SeatTypes == null)
+            {
+                throw new ArgumentNullException("SeatTypes");
+            }
+            if (UserContracts == null || UserContracts.Count == 0)
+            {
+                throw new ArgumentNullException("UserContract");
+            }
+            if (UserContracts.Count(o => o.UserType != ContractUserType.Children) == 0)
+            {
+                throw new Exception("儿童不能单独买票");
+            }
+            if (StartTrainStation.Order > EndTrainStation.Order)
+            {
+                throw new ArgumentNullException("StartTrainStation same EndTrainStation Order");
+            }
+            if (StartTrainStation.Order > EndTrainStation.Order)
+            {
+                var temp = StartTrainStation;
+                StartTrainStation = EndTrainStation;
+                EndTrainStation = temp;
+            }
+
+            var trainStationWay = new TrainStationWay(StartTrainStation, EndTrainStation);
+
+            IList<Seat> seats = isMatchSeats(TrainShift, StartTrainStation, EndTrainStation, SeatTypes);
+            //匹配优先在同一车厢
+            if (seats == null || seats.Count == 0)
+            {
+                seats = TrainShift.ExtraSeats.Where(o => SeatTypes.Contains(o.SeatType)).GroupBy(o => o.TrainCarriage).Where(o => o.Count() >= UserContracts.Count).FirstOrDefault().Take(UserContracts.Count).ToList();
+
+                if (seats == null)
+                {
+                    seats = TrainShift.ExtraSeats.Where(o => SeatTypes.Contains(o.SeatType)).Take(UserContracts.Count).ToList();
+                    if (seats == null || seats.Count < UserContracts.Count)
+                    {
+                        throw new Exception("余票不足，建议单独购买");
+                    }
+                }
+
+            }
+            else if (seats.Count < UserContracts.Count)
+            {
+                foreach (var item in seats)
+                {
+                    seats = seats.Union(TrainShift.ExtraSeats.Where(o => SeatTypes.Contains(o.SeatType) && o.TrainCarriage == item.TrainCarriage).Take(UserContracts.Count - seats.Count).ToList()).ToList();
+                    if (seats.Count == UserContracts.Count)
+                    {
+                        break;
+                    }
+                }
+
+                if (seats.Count < UserContracts.Count)
+                {
+                    seats = seats.Union(TrainShift.ExtraSeats.Where(o => SeatTypes.Contains(o.SeatType)).Take(UserContracts.Count - seats.Count).ToList()).ToList();
+                    if (seats.Count < UserContracts.Count)
+                    {
+                        throw new Exception("余票不足，建议单独购买");
+                    }
+                }
+            }
+            else
+            {
+                seats = seats.GroupBy(o => o.TrainCarriage).Where(o => o.Count() >= UserContracts.Count).FirstOrDefault().Take(UserContracts.Count).ToList();
+                if (seats == null || seats.Count == 0)
+                {
+                    seats = seats.Take(UserContracts.Count).ToList();
+                }
+
+            }
+            if (seats == null || UserContracts.Count > seats.Count)
+            {
+                throw new Exception("余票不足");
+            }
+
+            IList<TrainOrderItem> trainOrderItems = new List<TrainOrderItem>();
+            for (int i = 0; i < seats.Count; i++)
+            {
+
+                var seat = seats[i];
+                var userContract = UserContracts[i];
+                var b = TrainShift.ExtraSeats.Remove(seat);
+
+                TrainShift.FreezeSeats.Add(new DestinationSeat(seat, new List<TrainStationWay>() { trainStationWay }));
+
+                TrainShift.SaleSeats.Add(new DestinationSeat(seat, new List<TrainStationWay>() { trainStationWay }));
+
+                var price = TrainShift.TrainNumber.GetTrainStationWayPrice(trainStationWay, seat.SeatType);
+                TrainOrderItem trainOrderItem = new TrainOrderItem(seat, userContract, price);
+                trainOrderItems.Add(trainOrderItem);
+            }
+
+            TrainOrder trainOrder = new TrainOrder(trainStationWay.StartTrainStation, trainStationWay.EndTrainStation, CustomerInfo, trainOrderItems);
+            return (true, "预定成功", trainOrder);
+        }
+
+
+
+        /// <summary>
+        /// 判断是否有重叠区域
+        /// </summary>
+        /// <param name="StartTrainStation"></param>
+        /// <param name="EndTrainStation"></param>
+        /// <param name="SeatTypes"></param>
+        /// <returns></returns>
+        private IList<Seat> isMatchSeats(TrainShift TrainShift, TrainStation StartTrainStation, TrainStation EndTrainStation, IList<SeatTypeConfig> SeatTypes)
+        {
+            IList<Seat> list = new List<Seat>();
+
+            foreach (var item in TrainShift.SaleSeats)
+            {
+                int count = item.TrainStationWays.Count(o => (StartTrainStation < o.EndTrainStation && EndTrainStation > o.EndTrainStation)
+                  || (EndTrainStation > o.StartTrainStation && EndTrainStation < o.EndTrainStation)
+                  || (StartTrainStation >= o.StartTrainStation && EndTrainStation <= o.EndTrainStation)
+                  || (StartTrainStation <= o.StartTrainStation && EndTrainStation >= o.EndTrainStation)
+                  );
+                if (count == 0 && SeatTypes.Contains(item.Seat.SeatType))
+                {
+                    list.Add(item.Seat);
+                }
+            }
+            return list;
+
+        }
+
+        private Seat isMatchSeat(TrainShift TrainShift, TrainStation StartTrainStation, TrainStation EndTrainStation, IList<SeatTypeConfig> SeatTypes)
+        {
+            foreach (var item in TrainShift.SaleSeats)
+            {
+                int count = item.TrainStationWays.Count(o => (StartTrainStation < o.EndTrainStation && EndTrainStation > o.EndTrainStation)
+                  || (EndTrainStation > o.StartTrainStation && EndTrainStation < o.EndTrainStation)
+                  || (StartTrainStation >= o.StartTrainStation && EndTrainStation <= o.EndTrainStation)
+                  || (StartTrainStation <= o.StartTrainStation && EndTrainStation >= o.EndTrainStation)
+                  );
+                if (count == 0 && SeatTypes.Contains(item.Seat.SeatType))
+                {
+                    return item.Seat;
+                }
+            }
+            return null;
+
+        }
+
+    }
+}

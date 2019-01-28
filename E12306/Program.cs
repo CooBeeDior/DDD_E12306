@@ -1,24 +1,24 @@
-﻿using E12306.Common.Enum;
+﻿using E12306.Common;
+using E12306.Common.Enum;
 using E12306.Db;
 using E12306.Domain;
 using E12306.DomainEvent;
+using E12306.DomainEvent.Impl;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using E12306.DomainEvent.Impl;
 namespace E12306
 {
     class Program
     {
         static void Main(string[] args)
-        {
+        {        
             //初始化领域事件
             EventCollection.Subscribe(new WxOrderShippingEventHandle());
             EventCollection.Subscribe(new SmsOrderShippingEventHandle());
             EventCollection.Subscribe(new WxPaymentSucessEventHandle());
- 
-    
+
+
             TestDbContext testDbContext = new TestDbContext();
 
             TrainTypeConfig KtrainTypeConfig = new TrainTypeConfig("K", "快车");
@@ -285,13 +285,7 @@ namespace E12306
 
     }
 
-    public class A
-    {
-        public string Name { get; set; }
-
-
-
-    }
+ 
 
 
 

@@ -1,4 +1,6 @@
-﻿using E12306.Domain;
+﻿using E12306.Common;
+using E12306.Common.Enum;
+using E12306.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,8 @@ namespace E12306.Db
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-B0QBAS6\SQLEXPRESS;Initial Catalog=E12036;Integrated Security=True");
+          
+            optionsBuilder.UseSqlServer(Configuration.AppSettings.ConnectString);
 
    
         }

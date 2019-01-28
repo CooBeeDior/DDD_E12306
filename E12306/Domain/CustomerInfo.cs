@@ -1,5 +1,6 @@
 ﻿using E12306.Common;
 using E12306.Common.Enum;
+using E12306.DomainEvent;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -189,6 +190,7 @@ namespace E12306.Domain
                 TrainOrderItem trainOrderItem = new TrainOrderItem(seat, userContract, price);
                 trainOrderItems.Add(trainOrderItem);
             }
+   
 
             TrainOrder trainOrder = new TrainOrder(trainStationWay.StartTrainStation, trainStationWay.EndTrainStation, CustomerInfo, trainOrderItems);
             return (true, "预定成功", trainOrder);

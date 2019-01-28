@@ -2,6 +2,8 @@
 using E12306.Common.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -9,8 +11,9 @@ namespace E12306.Domain
 {
 
     /// <summary>
-    /// 火车票价格 值对象
+    /// 实体
     /// </summary>
+    [Table("TrainTicketPrice")]
     public class TrainTicketPrice : EntityBase
     {
         protected TrainTicketPrice()
@@ -23,15 +26,15 @@ namespace E12306.Domain
             this.EndTrainStation = EndTrainStation;
             this.TrainSeatPrices = TrainSeatPrices;
 
-            Version = 0;
+           
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
         }
-
+    
         public TrainStation StartTrainStation { get; private set; }
-
+  
         public TrainStation EndTrainStation { get; private set; }
 
         public IList<TrainSeatPrice> TrainSeatPrices { get; private set; }
@@ -68,7 +71,7 @@ namespace E12306.Domain
             this.Price = Price;
             this.IsDefault = IsDefault;
 
-            Version = 0;
+           
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace E12306.Domain
@@ -10,6 +11,9 @@ namespace E12306.Domain
     //D,
     //G,
     //C
+
+
+    [Table("TrainTypeConfig")]
     public class TrainTypeConfig : ConfigBase
     {
         public TrainTypeConfig(string Code, string Name) : base(Code, Name)

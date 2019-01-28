@@ -2,6 +2,8 @@
 using E12306.Common.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace E12306.Domain
@@ -10,6 +12,7 @@ namespace E12306.Domain
     /// <summary>
     /// 火车车厢 （实体）
     /// </summary>
+    [Table("TrainCarriage")]
     public class TrainCarriage : EntityBase
     {
         protected TrainCarriage()
@@ -26,7 +29,7 @@ namespace E12306.Domain
             this.CarriageType = CarriageType;
             this.Seats = Seats ?? new List<Seat>();
             this.Train = Train;
-            Version = 0;
+           
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
@@ -44,12 +47,15 @@ namespace E12306.Domain
         {
             Seats.Remove(Seat);
         }
-
+        [Required]
         public Train Train { get; private set; }
+        [Required]
         public string Name { get; private set; }
 
+        [Required]
         public int Order { get; private set; }
 
+        [Required]
         public CarriageTypeConfig CarriageType { get; private set; }
 
         public IList<Seat> Seats { get; private set; }

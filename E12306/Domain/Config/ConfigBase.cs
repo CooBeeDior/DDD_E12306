@@ -1,6 +1,7 @@
 ﻿using E12306.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace E12306.Domain
@@ -12,14 +13,15 @@ namespace E12306.Domain
             this.Code = Code;
             this.Name = Name;
 
-            Version = 0;
+           
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
         }
+        [Required]
         public virtual string Code { get; protected set; }
-
+        [Required]
         public virtual string Name { get; protected set; }
 
 

@@ -10,7 +10,9 @@ namespace E12306.Domain
         [Key]
         public virtual Guid Id { get; protected set; }
 
-        public virtual int Version { get; protected set; }
+        [Timestamp]
+        public virtual byte[] Version { get; protected set; }
+
         public virtual DateTimeOffset AddTime { get; protected set; }
 
         public virtual Guid AddUserId { get; protected set; }
@@ -18,6 +20,29 @@ namespace E12306.Domain
         public virtual DateTimeOffset UpdateTime { get; protected set; }
 
         public virtual Guid UpdateUserId { get; protected set; }
+
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as EntityBase;
+            return this.Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();     
+        
+        }
+
+
+        public static bool operator ==(EntityBase left, EntityBase right)
+        {
+            return left?.Id == right?.Id;
+        }
+        public static bool operator !=(EntityBase left, EntityBase right)
+        {
+            return left?.Id != right?.Id;
+        }
 
     }
 }

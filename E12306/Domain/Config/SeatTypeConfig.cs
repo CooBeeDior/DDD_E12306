@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace E12306.Domain
@@ -26,6 +27,7 @@ namespace E12306.Domain
     //    [Name("软卧")]
     //    SoftTSleep,
 
+    [Table("SeatTypeConfig")]
     public class SeatTypeConfig : ConfigBase
     {
         public SeatTypeConfig(string Code, string Name ) : this(Code, Name,null)

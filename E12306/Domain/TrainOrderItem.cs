@@ -10,32 +10,34 @@ namespace E12306.Domain
     /// <summary>
     /// 实体
     /// </summary>
-    [Table("Station")]
-    public class Station : EntityBase
+    [Table("TrainOrderItem")]
+    public class TrainOrderItem : EntityBase
     {
-        protected Station()
+        protected TrainOrderItem()
         {
-        }
-        public Station(string Code, string Name)
-        {
-            this.Code = Code;
-            this.Name = Name;
 
-           
+        }
+        public TrainOrderItem(Seat Seat, UserContract UserContract, decimal Price)
+        {
+            Id = Guid.NewGuid();
+            this.Seat = Seat;
+            this.UserContract = UserContract;
+
+            this.Price = Price;
+
+
+
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
         }
-
-
+ 
+        public Seat Seat { get; set; }
+ 
+        public UserContract UserContract { get; set; }
         [Required]
-        public string Code { get; private set; }
-        /// <summary>
-        /// 站名
-        /// </summary>
-        [Required]
-        public string Name { get; private set; }
+        public decimal Price { get; set; }
 
 
 

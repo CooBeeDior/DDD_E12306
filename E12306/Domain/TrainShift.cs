@@ -4,15 +4,18 @@ using E12306.Util;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
 namespace E12306.Domain
 {
     /// <summary>
-    ///    当天车次 实体
+    ///    当天车次 聚合根
     /// </summary>
-    public class TrainShift : EntityBase
+    [Table("TrainShift")]
+    public class TrainShift : AggregateRoot
     {
         protected TrainShift()
         {
@@ -25,23 +28,25 @@ namespace E12306.Domain
             this.Train = Train ?? throw new ArgumentNullException("TrainNumber");
             this.Date = Date;
 
-            Version = 0;
+
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
 
-            ExtraSeats = new List<Seat>();
-            SaleSeats = new List<DestinationSeat>();
-            FreezeSeats = new List<DestinationSeat>();
-            foreach (var trainCarriage in Train.TrainCarriages)
+            this.ExtraSeatInfos = new List<ExtraSeatInfo>();
+            foreach (var carriage in Train.TrainCarriages)
             {
-                foreach (var seat in trainCarriage.Seats)
+                foreach (var seat in carriage.Seats)
                 {
-                    ExtraSeats.Add(seat);
+                    this.ExtraSeatInfos.Add(new ExtraSeatInfo(this, seat));
                 }
             }
+            this.SaleSeatInfos = new List<SaleSeatInfo>();
+            this.FreezeSeatInfos = new List<FreezeSeatInfo>();
         }
+
+
 
 
         /// <summary>
@@ -51,84 +56,35 @@ namespace E12306.Domain
 
         /// <summary>
         /// 当天运行的火车
-        /// </summary>
+        /// </summary>  
         public Train Train { get; set; }
 
         /// <summary>
         /// 出发日期
         /// </summary>
+        [Required]
         public DateTimeOffset Date { get; private set; }
 
 
         /// <summary>
         /// 剩余的座位信息
-        /// </summary>
-        public IList<Seat> ExtraSeats { get; private set; }
+        /// </summary>  
+        public IList<ExtraSeatInfo> ExtraSeatInfos { get; private set; }
 
 
         /// <summary>
         /// 已销售的座位信息
-        /// </summary>
-        public IList<DestinationSeat> SaleSeats { get; private set; }
+        /// </summary> 
+        public IList<SaleSeatInfo> SaleSeatInfos { get; private set; }
 
         /// <summary>
         /// 冻结的座位信息
-        /// </summary>
-        public IList<DestinationSeat> FreezeSeats { get; private set; }
-
-
-
-        public void AddSaleSeat(Seat Seat)
-        {
-            ExtraSeats.Add(Seat);
-        }
-
-        public void AddSaleSeat(IList<Seat> Seats)
-        {
-            foreach (var seat in Seats)
-            {
-                ExtraSeats.Add(seat);
-            }
-
-        }
-
-        public void RemoveSaleSeat(IList<Seat> Seats)
-        {
-            foreach (var seat in Seats)
-            {
-                ExtraSeats.Remove(seat);
-            }
-        }
-
+        /// </summary>     
+        public IList<FreezeSeatInfo> FreezeSeatInfos { get; private set; }
 
 
 
 
     }
-
-    public class DestinationSeat : EntityBase
-    {
-        protected DestinationSeat()
-        {
-
-        }
-        public DestinationSeat(Seat Seat, IList<TrainStationWay> TrainStationWays)
-        {
-            this.Seat = Seat;
-            this.TrainStationWays = TrainStationWays;
-
-            Version = 0;
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
-        }
-        public Seat Seat { get; private set; }
-
-
-        public IList<TrainStationWay> TrainStationWays { get; private set; }
-    }
-
-
 
 }

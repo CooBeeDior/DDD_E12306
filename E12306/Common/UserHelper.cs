@@ -4,7 +4,7 @@ using System.Text;
 
 namespace E12306.Common
 {
-    public static class UserHelper
+    public class UserHelper
     {
         public static User User => new User(Guid.NewGuid(), "testUser");
     }
@@ -17,8 +17,8 @@ namespace E12306.Common
             this.UserName = UserName;
 
         }
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
 
-        public string UserName { get; set; }
+        public string UserName { get; private set; }
     }
 }

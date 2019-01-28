@@ -2,6 +2,8 @@
 using E12306.Common.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -10,6 +12,7 @@ namespace E12306.Domain
     /// <summary>
     /// 车次  实体
     /// </summary>
+    [Table("TrainNumber")]
     public class TrainNumber : EntityBase
     {
         protected TrainNumber()
@@ -34,19 +37,21 @@ namespace E12306.Domain
             this.TrainStations = TrainStations;
             this.TrainTicketPrices = TrainTicketPrices;
             this.Trains = Trains;
-            Version = 0;
+           
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
         }
+        [Required]
         public string Name { get; protected set; }
 
+        [Required]
         public string Code { get; protected set; }
 
         /// <summary>
         /// 车次类型 
-        /// </summary>
+        /// </summary> 
         public TrainTypeConfig TrainType { get; protected set; }
 
         /// <summary>

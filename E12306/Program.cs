@@ -1,19 +1,28 @@
-﻿using E12306.Common.Enum;
+﻿using E12306.Common;
+using E12306.Common.Enum;
 using E12306.Db;
 using E12306.Domain;
+using E12306.DomainEvent;
+using E12306.DomainEvent.Impl;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-
 namespace E12306
 {
     class Program
     {
+        static void InitEvent()
+        {
+            //初始化领域事件
+            EventCollection.Subscribe(new WxOrderShippingEventHandle());
+            EventCollection.Subscribe(new SmsOrderShippingEventHandle());
+            EventCollection.Subscribe(new WxPaymentSucessEventHandle());
+        }
+
+
         static void Main(string[] args)
         {
-
-            TestDbContext testDbContext = new TestDbContext();
+            InitEvent();
 
             TrainTypeConfig KtrainTypeConfig = new TrainTypeConfig("K", "快车");
             TrainTypeConfig ZtrainTypeConfig = new TrainTypeConfig("Z", "直达");
@@ -238,17 +247,17 @@ namespace E12306
             TrainShift trainShift = new TrainShift(trainNumber, train, date);
 
             //初始化客户信息
-            CustomerInfo customerInfo = new CustomerInfo("客户1", "1888888888");
+            CustomerInfo customerInfo = new CustomerInfo("客户1", "18888888888");
             var userContract1 = new UserContract("张三", "3604031324567835", ContractUserType.Children);
             var userContract2 = new UserContract("李四", "3604564554545456");
             var userContract11 = new UserContract("刘六2", "3604564554545454");
             customerInfo.AddUserContract(userContract1);
             customerInfo.AddUserContract(userContract2);
             customerInfo.AddUserContract(userContract11);
-            var sse = customerInfo.BookTrainTicket(trainShift, trainStations[2], trainStations[5], oneSeatTypeConfig, customerInfo, customerInfo.UserContracts);
+            var order1 = customerInfo.BookTrainTicket(trainShift, trainStations[2], trainStations[5], oneSeatTypeConfig, customerInfo, customerInfo.UserContracts);
 
             //初始化客户信息
-            CustomerInfo customerInfo1 = new CustomerInfo("客户2", "1222222222");
+            CustomerInfo customerInfo1 = new CustomerInfo("客户2", "13655555555");
             var userContract3 = new UserContract("王五", "3604031324567833");
             var userContract4 = new UserContract("刘六", "3604564554545454");
             var userContract41 = new UserContract("刘六11", "3604564554545454");
@@ -257,20 +266,25 @@ namespace E12306
             customerInfo1.AddUserContract(userContract4);
             customerInfo1.AddUserContract(userContract41);
             customerInfo1.AddUserContract(userContract421);
-            var s1s = customerInfo1.BookTrainTicket(trainShift, trainStations[7], trainStations[9], oneSeatTypeConfig, customerInfo1, customerInfo1.UserContracts);
+            var order2 = customerInfo1.BookTrainTicket(trainShift, trainStations[7], trainStations[9], oneSeatTypeConfig, customerInfo1, customerInfo1.UserContracts);
 
-            //TrainShift trainShift = new TrainShift(trainNumber)
 
-            CustomerInfo customerInfo2 = new CustomerInfo("客户3", "13333333");
+
+            CustomerInfo customerInfo2 = new CustomerInfo("客户3", "15588885558");
             var userContract5 = new UserContract("徐梦", "3604031324567831");
             var userContract6 = new UserContract("刘爽", "3604564554545452");
             customerInfo2.AddUserContract(userContract5);
             customerInfo2.AddUserContract(userContract6);
-            var sdd = customerInfo2.BookTrainTicket(trainShift, trainStations[1], trainStations[9], oneSeatTypeConfig, customerInfo2, customerInfo2.UserContracts);
+            var order3 = customerInfo2.BookTrainTicket(trainShift, trainStations[1], trainStations[9], oneSeatTypeConfig, customerInfo2, customerInfo2.UserContracts);
 
-            testDbContext.Add(sdd.Item3);
-            //testDbContext.Add(customerInfo1);
-            //testDbContext.Add(customerInfo2);
+
+            //ef 持久化数据库  ，TODO使用仓库持久化
+            TestDbContext testDbContext = new TestDbContext(); 
+
+            testDbContext.Add(trainShift);
+            testDbContext.Add(order1.Item3);
+            testDbContext.Add(order2.Item3);
+            testDbContext.Add(order3.Item3);
             testDbContext.SaveChanges();
             var ss = testDbContext.CustomerInfos.FirstOrDefault();
         }
@@ -279,13 +293,7 @@ namespace E12306
 
     }
 
-    public class A
-    {
-        public string Name { get; set; }
 
-
-
-    }
 
 
 

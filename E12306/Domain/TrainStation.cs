@@ -1,6 +1,8 @@
 ﻿using E12306.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace E12306.Domain
@@ -9,6 +11,7 @@ namespace E12306.Domain
     /// <summary>
     /// 车次站台 (实体)
     /// </summary>
+    [Table("TrainStation")]
     public class TrainStation : EntityBase
     {
         protected TrainStation()
@@ -29,29 +32,33 @@ namespace E12306.Domain
             this.Order = Order;
             this.IsSale = IsSale;
 
-            Version = 0;
+           
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
 
         }
-
+        [Required]
         public Station Station { get; private set; }
 
         /// <summary>
         /// 车次的第几站
         /// </summary>
+        [Required]
         public int Order { get; private set; }
 
+        [Required]
         public DateTimeOffset StartTime { get; private set; }
 
+        [Required]
         public DateTimeOffset EndTime { get; private set; }
 
 
         /// <summary>
         /// 是否出售 ，（该站会停站，但是不出售车票）
         /// </summary>
+        [Required]
         public bool IsSale { get; set; }
 
         public void SetOrder(int Order)

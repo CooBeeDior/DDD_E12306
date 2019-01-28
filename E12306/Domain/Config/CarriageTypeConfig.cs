@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace E12306.Domain
@@ -12,6 +13,7 @@ namespace E12306.Domain
     //    HardSleep,
     //    SoftSleep,
     //    Eat,
+    [Table("CarriageTypeConfig")]
     public class CarriageTypeConfig : ConfigBase
     {
         

@@ -2,6 +2,7 @@
 using E12306.Common.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -11,7 +12,7 @@ namespace E12306.Domain
 
 
     /// <summary>
-    /// 作为 (实体)
+    /// 座位 实体
     /// </summary>
     [Table("Seat")]
     public class Seat : EntityBase
@@ -27,7 +28,7 @@ namespace E12306.Domain
             this.Code = Code; 
             this.SeatType = SeatType;
 
-            Version = 0;
+           
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
@@ -36,18 +37,22 @@ namespace E12306.Domain
             TrainCarriage.AddSeat(this);
         }
 
-
+        [Required]
         public TrainCarriage TrainCarriage { get; private set; }
         /// <summary>
         /// 座位编号
         /// </summary>
+        [Required]
+        [MaxLength(50)]
         public string Code { get; private set; }
 
         /// <summary>
         /// 第几排
         /// </summary>
+        [Required]
         public int Row { get; private set; }
 
+        [Required]
         public SeatTypeConfig SeatType { get; private set; }
 
     }

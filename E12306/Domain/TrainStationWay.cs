@@ -1,14 +1,17 @@
 ﻿using E12306.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace E12306.Domain
 {
 
     /// <summary>
-    /// 路线 值对象
+    /// 类对象
     /// </summary>
+    [Table("TrainStationWay")]
     public class TrainStationWay : EntityBase
     {
         protected TrainStationWay()
@@ -20,14 +23,15 @@ namespace E12306.Domain
             this.StartTrainStation = StartTrainStation;
             this.EndTrainStation = EndTrainStation;
 
-            Version = 0;
+
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
         }
+  
         public TrainStation StartTrainStation { get; private set; }
-
+  
         public TrainStation EndTrainStation { get; private set; }
 
         public override bool Equals(object obj)

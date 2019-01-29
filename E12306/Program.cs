@@ -22,6 +22,8 @@ namespace E12306
 
         static void Main(string[] args)
         {
+            TestDbContext testDbContext1 = new TestDbContext();
+            testDbContext1.TrainTypeConfigs.FirstOrDefault();
             InitEvent();
 
             TrainTypeConfig KtrainTypeConfig = new TrainTypeConfig("K", "快车");

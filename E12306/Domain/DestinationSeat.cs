@@ -12,7 +12,7 @@ namespace E12306.Domain
     ///座位的信息  
     /// </summary>
     [Table("DestinationSeat")]
-    public class DestinationSeat : EntityBase
+    public class DestinationSeat : ValueObject<DestinationSeat>
     {
         protected DestinationSeat()
         {
@@ -33,11 +33,10 @@ namespace E12306.Domain
 
         [Required]
         public IList<TrainStationWay> TrainStationWays { get; private set; }
+    
 
-
-        public override bool Equals(object obj)
-        {
-            var other = obj as DestinationSeat;
+        protected override bool EqualsCore(DestinationSeat other)
+        {           
             if (this.Seat != other.Seat)
             {
                 return false;
@@ -55,34 +54,11 @@ namespace E12306.Domain
             return true;
         }
 
-        public override int GetHashCode()
+        protected override int GetHashCodeCore()
         {
             var a = Seat.GetHashCode();
             var b = TrainStationWays.GetHashCode();
             return a ^ b;
-        }
-
-
-        public static bool operator ==(DestinationSeat left, DestinationSeat right)
-        {
-            return isEqual(left, right);
-        }
-        public static bool operator !=(DestinationSeat left, DestinationSeat right)
-        {
-            return !isEqual(left, right);
-        }
-
-        private static bool isEqual(DestinationSeat left, DestinationSeat right)
-        {
-            var a = ReferenceEquals(left, null);
-            var b = ReferenceEquals(right, null);
-            if (a ^ b)
-            {
-                return false;
-            }
-            var c = ReferenceEquals(left, null);
-            var d = left.Equals(right);
-            return c || d;
         }
     }
 }

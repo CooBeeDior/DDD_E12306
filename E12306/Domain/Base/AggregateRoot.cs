@@ -4,7 +4,7 @@ using System.Text;
 
 namespace E12306.Domain
 {
-    public class AggregateRoot : EntityBase
+    public abstract class AggregateRoot : EntityBase
     {
     }
 }

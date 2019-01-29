@@ -52,6 +52,7 @@ namespace E12306.Domain
         }
 
         [Required]
+        [MaxLength(50)]
         public string Name { get; private set; }
 
         [Required]
@@ -60,7 +61,7 @@ namespace E12306.Domain
 
 
 
-  
+        [MaxLength(50)]
         public string IdCard { get; private set; }
 
         public IList<TrainOrder> TrainOrders { get; private set; }

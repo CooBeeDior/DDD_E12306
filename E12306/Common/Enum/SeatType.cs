@@ -1,9 +1,4 @@
-﻿using E12306.Util.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace E12306.Common.Enum
+﻿namespace E12306.Common.Enum
 {
 
     //public enum SeatType
@@ -22,7 +17,7 @@ namespace E12306.Common.Enum
     //    OneLevelSeat,
     //    [Name("二等座")]
     //    TwoLevelSeat,
-   
+
 
 
     //    [Name("硬卧上铺")]

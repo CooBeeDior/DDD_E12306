@@ -44,9 +44,11 @@ namespace E12306.Domain
             UpdateUserId = UserHelper.User.Id;
         }
         [Required]
+        [MaxLength(50)]
         public string Name { get; protected set; }
 
         [Required]
+        [MaxLength(50)]
         public string Code { get; protected set; }
 
         /// <summary>

@@ -24,22 +24,24 @@ namespace E12306.Domain
             this.IdCard = IdCard;
             this.UserType = UserType;
 
-           
+
             AddTime = DateTimeOffset.Now;
             UpdateTime = DateTimeOffset.Now;
             AddUserId = UserHelper.User.Id;
             UpdateUserId = UserHelper.User.Id;
         }
         [Required]
+        [MaxLength(50)]
         public string Name { get; private set; }
         [Required]
+        [MaxLength(50)]
         public string IdCard { get; private set; }
 
         [Required]
         public ContractUserType UserType { get; set; }
 
 
-      
+
 
 
     }

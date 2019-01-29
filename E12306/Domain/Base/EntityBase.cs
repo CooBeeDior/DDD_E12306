@@ -5,7 +5,7 @@ using System.Text;
 
 namespace E12306.Domain
 {
-    public class EntityBase
+    public abstract class EntityBase
     {
         [Key]
         public virtual Guid Id { get; protected set; }
@@ -30,8 +30,8 @@ namespace E12306.Domain
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();     
-        
+            return Id.GetHashCode();
+
         }
 
 

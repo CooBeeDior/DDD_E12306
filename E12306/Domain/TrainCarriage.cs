@@ -50,6 +50,7 @@ namespace E12306.Domain
         [Required]
         public Train Train { get; private set; }
         [Required]
+        [MaxLength(50)]
         public string Name { get; private set; }
 
         [Required]

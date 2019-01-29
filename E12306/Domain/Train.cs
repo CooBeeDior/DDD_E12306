@@ -36,6 +36,7 @@ namespace E12306.Domain
 
 
         [Required]
+        [MaxLength(50)]
         public string Code { get; private set; }
 
         public IList<TrainCarriage> TrainCarriages { get; private set; }

@@ -36,6 +36,7 @@ namespace E12306.Domain
         }
 
         [Required]
+        [MaxLength(50)]
         public string OrderNo { get; private set; }
 
        

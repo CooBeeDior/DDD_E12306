@@ -11,7 +11,7 @@ namespace E12306.Domain
     /// </summary>
     /// 
     [Table("ExtraSeatInfo")]
-    public class ExtraSeatInfo : EntityBase
+    public class ExtraSeatInfo : ValueObject<ExtraSeatInfo>
     {
         protected ExtraSeatInfo()
         {
@@ -34,41 +34,18 @@ namespace E12306.Domain
 
  
         public Seat Seat { get; private set; }
+      
 
-        public override bool Equals(object obj)
-        {
-            var other = obj as ExtraSeatInfo;
+        protected override bool EqualsCore(ExtraSeatInfo other)
+        {         
             return this.TrainShift == other.TrainShift && this.Seat == other.Seat;
         }
 
-        public override int GetHashCode()
+        protected override int GetHashCodeCore()
         {
             var a = TrainShift.GetHashCode();
             var b = Seat.GetHashCode();
             return a ^ b;
-        }
-
-
-        public static bool operator ==(ExtraSeatInfo left, ExtraSeatInfo right)
-        {
-            return isEqual(left, right);
-        }
-        public static bool operator !=(ExtraSeatInfo left, ExtraSeatInfo right)
-        {
-            return !isEqual(left, right);
-        }
-
-        private static bool isEqual(ExtraSeatInfo left, ExtraSeatInfo right)
-        {
-            var a = ReferenceEquals(left, null);
-            var b = ReferenceEquals(right, null);
-            if (a ^ b)
-            {
-                return false;
-            }
-            var c = ReferenceEquals(left, null);
-            var d = left.Equals(right);
-            return c || d;
         }
     }
 }

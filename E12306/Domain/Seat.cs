@@ -43,7 +43,7 @@ namespace E12306.Domain
         /// 座位编号
         /// </summary>
         [Required]
-        [MaxLength(50)]
+        [MaxLength(50)]            
         public string Code { get; private set; }
 
         /// <summary>

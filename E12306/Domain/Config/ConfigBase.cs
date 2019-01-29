@@ -20,8 +20,10 @@ namespace E12306.Domain
             UpdateUserId = UserHelper.User.Id;
         }
         [Required]
+        [MaxLength(50)]
         public virtual string Code { get; protected set; }
         [Required]
+        [MaxLength(50)]
         public virtual string Name { get; protected set; }
 
 

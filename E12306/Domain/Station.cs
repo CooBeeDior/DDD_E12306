@@ -30,11 +30,13 @@ namespace E12306.Domain
 
 
         [Required]
+        [MaxLength(50)]
         public string Code { get; private set; }
         /// <summary>
         /// 站名
         /// </summary>
         [Required]
+        [MaxLength(50)]
         public string Name { get; private set; }
 
 

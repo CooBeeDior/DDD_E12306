@@ -9,10 +9,10 @@ namespace E12306.Domain
 {
 
     /// <summary>
-    /// 类对象
+    /// 值对象
     /// </summary>
     [Table("TrainStationWay")]
-    public class TrainStationWay : EntityBase
+    public class TrainStationWay : ValueObject<TrainStationWay>
     {
         protected TrainStationWay()
         {
@@ -34,46 +34,23 @@ namespace E12306.Domain
   
         public TrainStation EndTrainStation { get; private set; }
 
-        public override bool Equals(object obj)
-        {
-            var other = obj as TrainStationWay;
-            return this.StartTrainStation == other.StartTrainStation && this.EndTrainStation == other.EndTrainStation;
-        }
-
-        public override int GetHashCode()
-        {
-            var a = StartTrainStation.GetHashCode();
-            var b = EndTrainStation.GetHashCode();
-            return a ^ b;
-        }
-
-
-        public static bool operator ==(TrainStationWay left, TrainStationWay right)
-        {
-            return isEqual(left, right);
-        }
-        public static bool operator !=(TrainStationWay left, TrainStationWay right)
-        {
-            return !isEqual(left, right);
-        }
-
-        private static bool isEqual(TrainStationWay left, TrainStationWay right)
-        {
-            var a = ReferenceEquals(left, null);
-            var b = ReferenceEquals(right, null);
-            if (a ^ b)
-            {
-                return false;
-            }
-            var c = ReferenceEquals(left, null);
-            var d = left.Equals(right);
-            return c || d;
-        }
+   
 
         public override string ToString()
         {
             return $"起点站：{StartTrainStation}；终点站:{EndTrainStation}";
         }
 
+        protected override bool EqualsCore(TrainStationWay other)
+        {
+            return this.StartTrainStation == other.StartTrainStation && this.EndTrainStation == other.EndTrainStation;
+        }
+
+        protected override int GetHashCodeCore()
+        {
+            var a = StartTrainStation.GetHashCode();
+            var b = EndTrainStation.GetHashCode();
+            return a ^ b;
+        }
     }
 }

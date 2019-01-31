@@ -11,43 +11,41 @@ namespace E12306.Domain
     /// <summary>
     /// 火车 实体
     /// </summary>
-   [Table("Train")]
+    [Table("Train")]   
     public class Train : EntityBase
     {
 
         public Train(string Code) : this(Code, null)
         {
+        }
+
+        public Train(string Code, IList<TrainCarriage> TrainCarriages) : this(Code, null, TrainCarriages)
+        {           
 
         }
 
-        public Train(string Code, IList<TrainCarriage> TrainCarriages)
+        public Train(string Code, TrainNumber TrainNumber, IList<TrainCarriage> TrainCarriages) : base()
         {
-            Id = Guid.NewGuid();
             this.Code = Code;
-            this.TrainCarriages = TrainCarriages;
+            this.TrainNumber = TrainNumber;
+            this.TrainCarriages = TrainCarriages ?? new List<TrainCarriage>();
 
+            TrainNumber?.Trains?.Add(this);
 
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
         }
 
-
+        [Required]
+        [ForeignKey("TrainNumberId")]
+        public virtual TrainNumber TrainNumber { get; private set; }
 
         [Required]
         [MaxLength(50)]
         public string Code { get; private set; }
 
-        public IList<TrainCarriage> TrainCarriages { get; private set; }
+        public virtual IList<TrainCarriage> TrainCarriages { get; private set; }
 
         public void AddTrainCarriage(TrainCarriage TrainCarriage)
         {
-            if (TrainCarriages == null)
-            {
-                TrainCarriages = new List<TrainCarriage>();
-            }
-
             foreach (var item in TrainCarriages.Where(o => o.Order >= TrainCarriage.Order))
             {
                 item.SetOrder(item.Order + 1);
@@ -57,10 +55,6 @@ namespace E12306.Domain
 
         public void RemoveTrainCarriage(TrainCarriage TrainCarriage)
         {
-            if (TrainCarriage == null)
-            {
-                throw new NullReferenceException("TrainCarriage is not null");
-            }
             TrainCarriages.Remove(TrainCarriage);
             foreach (var item in TrainCarriages.Where(o => o.Order >= TrainCarriage.Order))
             {

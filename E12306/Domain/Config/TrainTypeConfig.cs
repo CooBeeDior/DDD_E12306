@@ -11,8 +11,6 @@ namespace E12306.Domain
     //D,
     //G,
     //C
-
-
     [Table("TrainTypeConfig")]
     public class TrainTypeConfig : ConfigBase
     {

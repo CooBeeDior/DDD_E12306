@@ -17,27 +17,22 @@ namespace E12306.Domain
         {
 
         }
-        public ExtraSeatInfo(TrainShift TrainShift, Seat Seat)
+        public ExtraSeatInfo(TrainShift TrainShift, Seat Seat) : base()
         {
             this.Seat = Seat;
             this.TrainShift = TrainShift;
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
-
         }
 
 
-    
-        public TrainShift TrainShift { get; private set; }
+        //[Required]
+        public virtual TrainShift TrainShift { get; private set; }
 
- 
-        public Seat Seat { get; private set; }
-      
+        [Required]
+        public virtual Seat Seat { get; private set; }
+
 
         protected override bool EqualsCore(ExtraSeatInfo other)
-        {         
+        {
             return this.TrainShift == other.TrainShift && this.Seat == other.Seat;
         }
 

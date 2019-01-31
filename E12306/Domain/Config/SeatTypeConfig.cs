@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -30,37 +31,39 @@ namespace E12306.Domain
     [Table("SeatTypeConfig")]
     public class SeatTypeConfig : ConfigBase
     {
-        public SeatTypeConfig(string Code, string Name ) : this(Code, Name,null)
+        protected SeatTypeConfig() : base()
         {
-            this.LocationSeatType = LocationSeatType;
 
         }
 
-        public SeatTypeConfig(string Code, string Name, LocationSeatTypeConfig LocationSeatType) : base(Code, Name)
+        public SeatTypeConfig(string Code, string Name) : this(Code, Name, null)
         {
-            this.LocationSeatType = LocationSeatType;
 
         }
 
-        public void SetLocationSeatTypeConfig(LocationSeatTypeConfig LocationSeatType)
+        public SeatTypeConfig(string Code, string Name, IList<LocationSeatTypeConfig> LocationSeatTypes) : base(Code, Name)
         {
-            this.LocationSeatType = LocationSeatType;
+            this.LocationSeatTypes = LocationSeatTypes ?? new List<LocationSeatTypeConfig>();
 
         }
+ 
+        public virtual IList<LocationSeatTypeConfig> LocationSeatTypes { get; private set; }
 
+        public void AddLocationSeatTypeConfig(LocationSeatTypeConfig LocationSeatType)
+        {
+            this.LocationSeatTypes.Add(LocationSeatType);
 
-        public LocationSeatTypeConfig LocationSeatType { get; private set; }
-
+        }
 
         public override bool Equals(object obj)
         {
             var other = obj as SeatTypeConfig;
-            return this.LocationSeatType == other.LocationSeatType && base.Equals(obj);
+            return this.LocationSeatTypes == other.LocationSeatTypes && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            var a = LocationSeatType.GetHashCode();
+            var a = LocationSeatTypes.GetHashCode();
             return a ^ base.GetHashCode();
         }
 

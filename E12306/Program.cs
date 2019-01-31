@@ -22,9 +22,10 @@ namespace E12306
 
         static void Main(string[] args)
         {
-            TestDbContext testDbContext1 = new TestDbContext();
-            testDbContext1.TrainTypeConfigs.FirstOrDefault();
+            TestDbContext testDbContex11t = new TestDbContext();
+            var adadaadad = testDbContex11t.CustomerInfos.ToList();
             InitEvent();
+
 
             TrainTypeConfig KtrainTypeConfig = new TrainTypeConfig("K", "快车");
             TrainTypeConfig ZtrainTypeConfig = new TrainTypeConfig("Z", "直达");
@@ -56,6 +57,8 @@ namespace E12306
             //testDbContext.Add(softSleepCarriageTypeConfig);
             //testDbContext.Add(eatSleepCarriageTypeConfig);
 
+
+
             IList<SeatTypeConfig> seatTypeConfigs = new List<SeatTypeConfig>();
             SeatTypeConfig oneSeatTypeConfig = new SeatTypeConfig("一等座", "一等座");
             SeatTypeConfig twoSeatTypeConfig = new SeatTypeConfig("二等座", "二等座");
@@ -74,15 +77,16 @@ namespace E12306
             //testDbContext.AddRange(sleepSeatTypeConfigs);
 
 
-            LocationSeatTypeConfig toplocationSeatTypeConfig = new LocationSeatTypeConfig("Top", "上铺");
-            LocationSeatTypeConfig middlelocationSeatTypeConfig = new LocationSeatTypeConfig("Middle", "上铺");
-            LocationSeatTypeConfig downlocationSeatTypeConfig = new LocationSeatTypeConfig("Down", "上铺");
-            LocationSeatTypeConfig alocationSeatTypeConfig = new LocationSeatTypeConfig("A", "A", true);
-            LocationSeatTypeConfig blocationSeatTypeConfig = new LocationSeatTypeConfig("B", "B");
-            LocationSeatTypeConfig clocationSeatTypeConfig = new LocationSeatTypeConfig("C", "C");
-            LocationSeatTypeConfig dlocationSeatTypeConfig = new LocationSeatTypeConfig("D", "D");
-            LocationSeatTypeConfig elocationSeatTypeConfig = new LocationSeatTypeConfig("E", "E");
-            LocationSeatTypeConfig flocationSeatTypeConfig = new LocationSeatTypeConfig("F", "F", true);
+            LocationSeatTypeConfig toplocationSeatTypeConfig = new LocationSeatTypeConfig(hardSleepSeatTypeConfig, "Top", "上铺");
+            LocationSeatTypeConfig middlelocationSeatTypeConfig = new LocationSeatTypeConfig(hardSleepSeatTypeConfig, "Middle", "上铺");
+            LocationSeatTypeConfig downlocationSeatTypeConfig = new LocationSeatTypeConfig(hardSleepSeatTypeConfig, "Down", "上铺");
+            LocationSeatTypeConfig alocationSeatTypeConfig = new LocationSeatTypeConfig(oneSeatTypeConfig, "A", "A", true);
+            LocationSeatTypeConfig blocationSeatTypeConfig = new LocationSeatTypeConfig(oneSeatTypeConfig, "B", "B");
+            LocationSeatTypeConfig clocationSeatTypeConfig = new LocationSeatTypeConfig(oneSeatTypeConfig, "C", "C");
+            LocationSeatTypeConfig dlocationSeatTypeConfig = new LocationSeatTypeConfig(oneSeatTypeConfig, "D", "D");
+            LocationSeatTypeConfig elocationSeatTypeConfig = new LocationSeatTypeConfig(oneSeatTypeConfig, "E", "E");
+            LocationSeatTypeConfig flocationSeatTypeConfig = new LocationSeatTypeConfig(oneSeatTypeConfig, "F", "F", true);
+
             //testDbContext.AddRange(toplocationSeatTypeConfig);
             //testDbContext.AddRange(middlelocationSeatTypeConfig);
             //testDbContext.AddRange(downlocationSeatTypeConfig);
@@ -129,7 +133,7 @@ namespace E12306
 
                 foreach (var item in locationSeatTypeConfigs)
                 {
-                    businessSeatTypeConfig.SetLocationSeatTypeConfig(item);
+                    businessSeatTypeConfig.AddLocationSeatTypeConfig(item);
                     Seat seat = new Seat(trainCarriage1, i, $"{i}{item.Code}", businessSeatTypeConfig);
                     seatsbusiness.Add(seat);
                 }
@@ -144,7 +148,7 @@ namespace E12306
 
                 foreach (var item in locationSeatTypeConfigs)
                 {
-                    oneSeatTypeConfig.SetLocationSeatTypeConfig(item);
+                    oneSeatTypeConfig.AddLocationSeatTypeConfig(item);
                     Seat seat = new Seat(trainCarriage2, i, $"{i}{item.Code}", oneSeatTypeConfig);
                     seats1.Add(seat);
 
@@ -163,7 +167,7 @@ namespace E12306
             {
                 foreach (var item in locationSeatTypeConfigs)
                 {
-                    twoSeatTypeConfig.SetLocationSeatTypeConfig(item);
+                    twoSeatTypeConfig.AddLocationSeatTypeConfig(item);
                     Seat seat = new Seat(trainCarriage4, i, $"{i}{item.Code}", twoSeatTypeConfig);
                     seats2.Add(seat);
 
@@ -183,7 +187,7 @@ namespace E12306
 
                 foreach (var item in sleeplocationSeatTypeConfigs)
                 {
-                    softSleepSeatTypeConfig.SetLocationSeatTypeConfig(item);
+                    softSleepSeatTypeConfig.AddLocationSeatTypeConfig(item);
                     Seat seat = new Seat(trainCarriage7, i, $"{i}{item.Code}", softSleepSeatTypeConfig);
                     seatSoftSleep.Add(seat);
                 }
@@ -200,7 +204,7 @@ namespace E12306
 
                 foreach (var item in sleeplocationSeatTypeConfigs)
                 {
-                    hardSleepSeatTypeConfig.SetLocationSeatTypeConfig(item);
+                    hardSleepSeatTypeConfig.AddLocationSeatTypeConfig(item);
                     Seat seat = new Seat(trainCarriage8, i, $"{i}{item.Code}", hardSleepSeatTypeConfig);
                     seatHardSleep.Add(seat);
                 }
@@ -249,21 +253,21 @@ namespace E12306
             TrainShift trainShift = new TrainShift(trainNumber, train, date);
 
             //初始化客户信息
-            CustomerInfo customerInfo = new CustomerInfo("客户1", "18888888888");
-            var userContract1 = new UserContract("张三", "3604031324567835", ContractUserType.Children);
-            var userContract2 = new UserContract("李四", "3604564554545456");
-            var userContract11 = new UserContract("刘六2", "3604564554545454");
+            CustomerInfo customerInfo = new CustomerInfo("客户1", "18888888888","aa@.com");
+            var userContract1 = new UserContract(customerInfo, "张三", "3604031324567835", ContractUserType.Children);
+            var userContract2 = new UserContract(customerInfo, "李四", "3604564554545456");
+            var userContract11 = new UserContract(customerInfo, "刘六2", "3604564554545454");
             customerInfo.AddUserContract(userContract1);
             customerInfo.AddUserContract(userContract2);
             customerInfo.AddUserContract(userContract11);
             var order1 = customerInfo.BookTrainTicket(trainShift, trainStations[2], trainStations[5], oneSeatTypeConfig, customerInfo, customerInfo.UserContracts);
 
             //初始化客户信息
-            CustomerInfo customerInfo1 = new CustomerInfo("客户2", "13655555555");
-            var userContract3 = new UserContract("王五", "3604031324567833");
-            var userContract4 = new UserContract("刘六", "3604564554545454");
-            var userContract41 = new UserContract("刘六11", "3604564554545454");
-            var userContract421 = new UserContract("刘六22", "3604564554545454");
+            CustomerInfo customerInfo1 = new CustomerInfo("客户2", "13655555555", "aa@.com");
+            var userContract3 = new UserContract(customerInfo1, "王五", "3604031324567833");
+            var userContract4 = new UserContract(customerInfo1, "刘六", "3604564554545454");
+            var userContract41 = new UserContract(customerInfo1, "刘六11", "3604564554545454");
+            var userContract421 = new UserContract(customerInfo1, "刘六22", "3604564554545454");
             customerInfo1.AddUserContract(userContract3);
             customerInfo1.AddUserContract(userContract4);
             customerInfo1.AddUserContract(userContract41);
@@ -272,16 +276,15 @@ namespace E12306
 
 
 
-            CustomerInfo customerInfo2 = new CustomerInfo("客户3", "15588885558");
-            var userContract5 = new UserContract("徐梦", "3604031324567831");
-            var userContract6 = new UserContract("刘爽", "3604564554545452");
-            customerInfo2.AddUserContract(userContract5);
-            customerInfo2.AddUserContract(userContract6);
+            CustomerInfo customerInfo2 = new CustomerInfo("客户3", "15588885558", "aa@.com");
+            var userContract5 = new UserContract(customerInfo2, "徐梦", "3604031324567831");
+            var userContract6 = new UserContract(customerInfo2, "刘爽", "3604564554545452");
+
             var order3 = customerInfo2.BookTrainTicket(trainShift, trainStations[1], trainStations[9], oneSeatTypeConfig, customerInfo2, customerInfo2.UserContracts);
 
 
             //ef 持久化数据库  ，TODO使用仓库持久化
-            TestDbContext testDbContext = new TestDbContext(); 
+            TestDbContext testDbContext = new TestDbContext();
 
             testDbContext.Add(trainShift);
             testDbContext.Add(order1.Item3);

@@ -17,25 +17,25 @@ namespace E12306.Domain
     {
         protected TrainCarriage()
         { }
+
+        public TrainCarriage(int Order, string Name, CarriageTypeConfig CarriageType) : this(null, Order, Name, CarriageType)
+        {
+
+        }
         public TrainCarriage(Train Train, int Order, string Name, CarriageTypeConfig CarriageType) : this(Train, Order, Name, CarriageType, null)
         {
 
         }
-        public TrainCarriage(Train Train, int Order, string Name, CarriageTypeConfig CarriageType, IList<Seat> Seats)
+        public TrainCarriage(Train Train, int Order, string Name, CarriageTypeConfig CarriageType, IList<Seat> Seats) : base()
         {
-            this.Id = Guid.NewGuid();
+
             this.Name = Name;
             this.Order = Order;
             this.CarriageType = CarriageType;
             this.Seats = Seats ?? new List<Seat>();
             this.Train = Train;
-           
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
 
-            Train.AddTrainCarriage(this);
+            Train?.AddTrainCarriage(this);
         }
 
 
@@ -48,7 +48,7 @@ namespace E12306.Domain
             Seats.Remove(Seat);
         }
         [Required]
-        public Train Train { get; private set; }
+        public virtual Train Train { get; private set; }
         [Required]
         [MaxLength(50)]
         public string Name { get; private set; }
@@ -57,9 +57,9 @@ namespace E12306.Domain
         public int Order { get; private set; }
 
         [Required]
-        public CarriageTypeConfig CarriageType { get; private set; }
+        public virtual CarriageTypeConfig CarriageType { get; private set; }
 
-        public IList<Seat> Seats { get; private set; }
+        public virtual IList<Seat> Seats { get; private set; }
 
 
         public void SetOrder(int Order)

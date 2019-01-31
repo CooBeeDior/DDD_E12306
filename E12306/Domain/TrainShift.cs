@@ -21,18 +21,12 @@ namespace E12306.Domain
         {
 
         }
-        public TrainShift(TrainNumber TrainNumber, Train Train, DateTimeOffset Date)
+        public TrainShift(TrainNumber TrainNumber, Train Train, DateTimeOffset Date) : base()
         {
-            Id = Guid.NewGuid();
             this.TrainNumber = TrainNumber ?? throw new ArgumentNullException("TrainNumber");
             this.Train = Train ?? throw new ArgumentNullException("TrainNumber");
             this.Date = Date;
 
-
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
 
             this.ExtraSeatInfos = new List<ExtraSeatInfo>();
             foreach (var carriage in Train.TrainCarriages)
@@ -52,12 +46,14 @@ namespace E12306.Domain
         /// <summary>
         /// 车次
         /// </summary>
-        public TrainNumber TrainNumber { get; private set; }
+        //[Required]
+        public virtual TrainNumber TrainNumber { get; private set; }
 
         /// <summary>
         /// 当天运行的火车
         /// </summary>  
-        public Train Train { get; set; }
+        [Required]
+        public virtual Train Train { get; private set; }
 
         /// <summary>
         /// 出发日期
@@ -69,18 +65,18 @@ namespace E12306.Domain
         /// <summary>
         /// 剩余的座位信息
         /// </summary>  
-        public IList<ExtraSeatInfo> ExtraSeatInfos { get; private set; }
+        public virtual IList<ExtraSeatInfo> ExtraSeatInfos { get; private set; }
 
 
         /// <summary>
         /// 已销售的座位信息
         /// </summary> 
-        public IList<SaleSeatInfo> SaleSeatInfos { get; private set; }
+        public virtual IList<SaleSeatInfo> SaleSeatInfos { get; private set; }
 
         /// <summary>
         /// 冻结的座位信息
         /// </summary>     
-        public IList<FreezeSeatInfo> FreezeSeatInfos { get; private set; }
+        public virtual IList<FreezeSeatInfo> FreezeSeatInfos { get; private set; }
 
 
 

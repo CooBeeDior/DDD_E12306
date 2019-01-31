@@ -25,22 +25,16 @@ namespace E12306.Domain
         }
 
 
-        public TrainStation(Station Station, int Order, bool IsSale)
+        public TrainStation(Station Station, int Order, bool IsSale) : base()
         {
-            Id = Guid.NewGuid();
             this.Station = Station;
             this.Order = Order;
             this.IsSale = IsSale;
 
-           
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
 
         }
         [Required]
-        public Station Station { get; private set; }
+        public virtual Station Station { get; private set; }
 
         /// <summary>
         /// 车次的第几站
@@ -59,7 +53,7 @@ namespace E12306.Domain
         /// 是否出售 ，（该站会停站，但是不出售车票）
         /// </summary>
         [Required]
-        public bool IsSale { get; set; }
+        public bool IsSale { get; private set; }
 
         public void SetOrder(int Order)
         {

@@ -16,16 +16,11 @@ namespace E12306.Domain
         protected Station()
         {
         }
-        public Station(string Code, string Name)
+        public Station(string Code, string Name) : base()
         {
             this.Code = Code;
             this.Name = Name;
-
-           
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
+ 
         }
 
 

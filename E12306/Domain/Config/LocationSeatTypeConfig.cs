@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -18,15 +19,29 @@ namespace E12306.Domain
     [Table("LocationSeatTypeConfig")]
     public class LocationSeatTypeConfig : ConfigBase
     {
-        public LocationSeatTypeConfig(string Code, string Name,bool IsCloseWindow=false) : base(Code, Name)
+        protected LocationSeatTypeConfig() : base()
+        {
+
+        }
+        public LocationSeatTypeConfig(SeatTypeConfig SeatTypeConfig, string Code, string Name, bool IsCloseWindow = false) : base(Code, Name)
         {
             this.IsCloseWindow = IsCloseWindow;
+            this.SeatTypeConfig = SeatTypeConfig;
+
+            SeatTypeConfig.AddLocationSeatTypeConfig(this);
         }
 
+        [Required] 
+        public virtual SeatTypeConfig SeatTypeConfig { get; private set; }
+
+     
+ 
+
+        [Required]
         public bool IsCloseWindow { get; private set; }
 
 
-     
+
 
     }
 }

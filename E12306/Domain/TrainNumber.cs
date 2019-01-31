@@ -28,20 +28,15 @@ namespace E12306.Domain
         {
 
         }
-        public TrainNumber(string Code, string Name, TrainTypeConfig TrainType, IList<TrainStation> TrainStations, IList<TrainTicketPrice> TrainTicketPrices, IList<Train> Trains)
+        public TrainNumber(string Code, string Name, TrainTypeConfig TrainType, IList<TrainStation> TrainStations, IList<TrainTicketPrice> TrainTicketPrices, IList<Train> Trains) : base()
         {
-            this.Id = Guid.NewGuid();
+
             this.Code = Code;
             this.Name = Name;
             this.TrainType = TrainType;
-            this.TrainStations = TrainStations;
-            this.TrainTicketPrices = TrainTicketPrices;
-            this.Trains = Trains;
-           
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
+            this.TrainStations = TrainStations ?? new List<TrainStation>();
+            this.TrainTicketPrices = TrainTicketPrices ?? new List<TrainTicketPrice>(); ;
+            this.Trains = Trains ?? new List<Train>(); ;
         }
         [Required]
         [MaxLength(50)]
@@ -54,32 +49,28 @@ namespace E12306.Domain
         /// <summary>
         /// 车次类型 
         /// </summary> 
-        public TrainTypeConfig TrainType { get; protected set; }
+        [Required]
+        public virtual TrainTypeConfig TrainType { get; protected set; }
 
         /// <summary>
         /// 车票价格
         /// </summary>
-        public IList<TrainTicketPrice> TrainTicketPrices { get; private set; }
+        public virtual IList<TrainTicketPrice> TrainTicketPrices { get; private set; }
 
         /// <summary>
         /// 站
         /// </summary>
-        public IList<TrainStation> TrainStations { get; private set; }
-
+        public virtual IList<TrainStation> TrainStations { get; private set; }
 
 
         /// <summary>
         /// 火车
         /// </summary>
-        public IList<Train> Trains { get; private set; }
+        public virtual IList<Train> Trains { get; private set; }
 
 
         public void AddTrain(Train Train)
         {
-            if (Trains == null)
-            {
-                Trains = new List<Train>();
-            }
             if (Trains.Where(o => o.Id == Train.Id).Count() > 0)
             {
                 throw new Exception("exsit same train");
@@ -88,10 +79,6 @@ namespace E12306.Domain
         }
         public void RemoveTrain(Train Train)
         {
-            if (Trains == null)
-            {
-                Trains = new List<Train>();
-            }
             if (Trains.Where(o => o.Id == Train.Id).Count() == 0)
             {
                 throw new Exception("not exsit train");
@@ -101,10 +88,6 @@ namespace E12306.Domain
 
         public void AddTrainTicketPrice(TrainTicketPrice TrainTicketPrice)
         {
-            if (TrainTicketPrices == null)
-            {
-                TrainTicketPrices = new List<TrainTicketPrice>();
-            }
             if (TrainTicketPrices.Where(o => o.StartTrainStation == TrainTicketPrice.StartTrainStation && o.EndTrainStation == TrainTicketPrice.EndTrainStation).Count() > 0)
             {
                 throw new Exception("exsit same TrainTicketPrice");
@@ -114,10 +97,6 @@ namespace E12306.Domain
 
         public void RemoveTrainTicketPrice(TrainTicketPrice TrainTicketPrice)
         {
-            if (TrainTicketPrices == null)
-            {
-                TrainTicketPrices = new List<TrainTicketPrice>();
-            }
             if (TrainTicketPrices.Where(o => o.StartTrainStation == TrainTicketPrice.StartTrainStation && o.EndTrainStation == TrainTicketPrice.EndTrainStation).Count() == 0)
             {
                 throw new Exception("not exsit  TrainTicketPrice");
@@ -129,10 +108,6 @@ namespace E12306.Domain
 
         public void AddTrainStation(TrainStation TrainStation)
         {
-            if (TrainStations == null)
-            {
-                TrainStations = new List<TrainStation>();
-            }
             TrainStations.Add(TrainStation);
             foreach (var item in TrainStations.Where(o => o.Order >= TrainStation.Order))
             {
@@ -142,10 +117,6 @@ namespace E12306.Domain
 
         public void RemoveTrainStation(TrainStation TrainStation)
         {
-            if (TrainStation == null)
-            {
-                throw new NullReferenceException("TrainCarriage is not null");
-            }
             TrainStations.Remove(TrainStation);
             foreach (var item in TrainStations.Where(o => o.Order >= TrainStation.Order))
             {
@@ -165,7 +136,7 @@ namespace E12306.Domain
 
             var list = TrainTicketPrices.Where(o => o.StartTrainStation >= TrainStationWay.StartTrainStation && o.EndTrainStation <= TrainStationWay.EndTrainStation);
 
-         
+
             foreach (var item in list)
             {
                 var trainSeatPrices = item.TrainSeatPrices.Where(o => o.SeatType == SeatType).FirstOrDefault();

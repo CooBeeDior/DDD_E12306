@@ -17,25 +17,20 @@ namespace E12306.Domain
         {
 
         }
-        public FreezeSeatInfo(TrainShift TrainShift ,DestinationSeat DestinationSeat)
+        public FreezeSeatInfo(TrainShift TrainShift, DestinationSeat DestinationSeat) : base()
         {
             this.DestinationSeat = DestinationSeat;
             this.TrainShift = TrainShift;
 
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
-
             TrainShift.FreezeSeatInfos.Add(this);
         }
-        
-        public TrainShift TrainShift { get; private set; }
+        //[Required]
+        public virtual TrainShift TrainShift { get; private set; }
 
-      
-        public DestinationSeat DestinationSeat { get; private set; }
+        [Required]
+        public virtual DestinationSeat DestinationSeat { get; private set; }
 
-   
+
         protected override bool EqualsCore(FreezeSeatInfo other)
         {
             return this.TrainShift == other.TrainShift && this.DestinationSeat == other.DestinationSeat;

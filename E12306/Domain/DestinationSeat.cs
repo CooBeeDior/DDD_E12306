@@ -18,25 +18,20 @@ namespace E12306.Domain
         {
 
         }
-        public DestinationSeat(Seat Seat, IList<TrainStationWay> TrainStationWays)
+        public DestinationSeat(Seat Seat, IList<TrainStationWay> TrainStationWays) : base()
         {
             this.Seat = Seat;
             this.TrainStationWays = TrainStationWays;
-
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
         }
         [Required]
-        public Seat Seat { get; private set; }
+        public virtual Seat Seat { get; private set; }
 
         [Required]
-        public IList<TrainStationWay> TrainStationWays { get; private set; }
-    
+        public virtual IList<TrainStationWay> TrainStationWays { get; private set; }
+
 
         protected override bool EqualsCore(DestinationSeat other)
-        {           
+        {
             if (this.Seat != other.Seat)
             {
                 return false;

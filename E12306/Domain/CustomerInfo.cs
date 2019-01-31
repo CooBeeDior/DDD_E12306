@@ -20,55 +20,64 @@ namespace E12306.Domain
         {
 
         }
-        public CustomerInfo(string Name) : this(Name, null)
-        {
-
-        }
-
         public CustomerInfo(string Name, string PhoneNumber) : this(Name, PhoneNumber, null)
         {
 
         }
 
-        public CustomerInfo(string Name, string PhoneNumber, string IdCard) : this(Name, PhoneNumber, null, null)
+        public CustomerInfo(string Name, string PhoneNumber, string Email) : this(Name, PhoneNumber, Email, null)
         {
 
         }
 
-        public CustomerInfo(string Name, string PhoneNumber, string IdCard, IList<UserContract> UserContracts)
+        public CustomerInfo(string Name, string PhoneNumber, string Email, string IdCard, IList<Address> Addresses = null, IList<UserContract> UserContracts = null) : base()
         {
-            Id = Guid.NewGuid();
             this.Name = Name;
             this.PhoneNumber = PhoneNumber;
-            this.IdCard = IdCard;
+            this.Email = Email;
+            this.IdCard = IdCard ?? "";
             this.TrainOrders = new List<TrainOrder>(); ;
             this.UserContracts = UserContracts ?? new List<UserContract>();
-
-
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
+            this.Addresses = Addresses ?? new List<Address>();
         }
 
-        [Required]
+
+
         [MaxLength(50)]
+        [Required]
         public string Name { get; private set; }
 
-        [Required]
+        [EmailAddress]
+        [MaxLength(50)]
+        [Required]     
+        public string Email { get; set; }
+
         [Phone]
+        [MaxLength(50)]
+        [Required]
         public string PhoneNumber { get; private set; }
 
 
-
+        [CreditCard]
         [MaxLength(50)]
+        [Required(AllowEmptyStrings = true)]
         public string IdCard { get; private set; }
 
-        public IList<TrainOrder> TrainOrders { get; private set; }
 
-        public IList<UserContract> UserContracts { get; private set; }
+        public virtual IList<Address> Addresses { get; private set; }
 
+        public virtual IList<TrainOrder> TrainOrders { get; private set; }
 
+        public virtual IList<UserContract> UserContracts { get; private set; }
+
+        public void AddAddress(Address Address)
+        {
+            this.Addresses.Add(Address);
+        }
+        public void RemoveAddress(Address Address)
+        {
+            this.Addresses.Remove(Address);
+        }
         public void AddUserContract(UserContract UserContract)
         {
             UserContracts.Add(UserContract);

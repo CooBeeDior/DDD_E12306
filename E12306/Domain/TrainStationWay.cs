@@ -18,23 +18,18 @@ namespace E12306.Domain
         {
         }
 
-        public TrainStationWay(TrainStation StartTrainStation, TrainStation EndTrainStation)
+        public TrainStationWay(TrainStation StartTrainStation, TrainStation EndTrainStation) : base()
         {
             this.StartTrainStation = StartTrainStation;
             this.EndTrainStation = EndTrainStation;
 
-
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
         }
-  
-        public TrainStation StartTrainStation { get; private set; }
-  
-        public TrainStation EndTrainStation { get; private set; }
+        //[Required]
+        public virtual TrainStation StartTrainStation { get; private set; }
+        //[Required]
+        public virtual TrainStation EndTrainStation { get; private set; }
 
-   
+
 
         public override string ToString()
         {

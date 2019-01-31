@@ -17,27 +17,19 @@ namespace E12306.Domain
         {
 
         }
-        public TrainOrderItem(Seat Seat, UserContract UserContract, decimal Price)
+        public TrainOrderItem(Seat Seat, UserContract UserContract, decimal Price) : base()
         {
-            Id = Guid.NewGuid();
             this.Seat = Seat;
             this.UserContract = UserContract;
-
             this.Price = Price;
-
-
-
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
         }
- 
-        public Seat Seat { get; set; }
- 
-        public UserContract UserContract { get; set; }
         [Required]
-        public decimal Price { get; set; }
+        public virtual Seat Seat { get; private set; }
+        [Required]
+        public virtual UserContract UserContract { get; private set; }
+
+        [Required]
+        public decimal Price { get; private set; }
 
 
 

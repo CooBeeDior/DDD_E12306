@@ -14,22 +14,23 @@ namespace E12306.Domain
     [Table("UserContract")]
     public class UserContract : EntityBase
     {
-        //public UserContract()
-        //{
-        //}
-        public UserContract(string Name, string IdCard, ContractUserType UserType = ContractUserType.Adult)
+        protected UserContract()
         {
-            Id = Guid.NewGuid();
+        } 
+
+        public UserContract(CustomerInfo CustomerInfo, string Name, string IdCard, ContractUserType UserType = ContractUserType.Adult) : base()
+        {
             this.Name = Name;
             this.IdCard = IdCard;
             this.UserType = UserType;
 
+            this.CustomerInfo = CustomerInfo;
+            CustomerInfo?.AddUserContract(this);
 
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
         }
+        [Required]
+        public virtual CustomerInfo CustomerInfo { get; private set; }
+
         [Required]
         [MaxLength(50)]
         public string Name { get; private set; }

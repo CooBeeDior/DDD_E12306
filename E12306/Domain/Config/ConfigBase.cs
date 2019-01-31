@@ -2,22 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace E12306.Domain
 {
+
     public class ConfigBase : EntityBase
     {
-        public ConfigBase(string Code, string Name)
+        protected ConfigBase()
+        {
+
+        }
+        public ConfigBase(string Code, string Name) : base()
         {
             this.Code = Code;
             this.Name = Name;
-
-           
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
         }
         [Required]
         [MaxLength(50)]

@@ -20,30 +20,24 @@ namespace E12306.Domain
         protected Seat()
         {
         }
-        public Seat(TrainCarriage TrainCarriage,int Row, string Code, SeatTypeConfig SeatType)
+        public Seat(TrainCarriage TrainCarriage, int Row, string Code, SeatTypeConfig SeatType) : base()
         {
-            base.Id = Guid.NewGuid();
+
             this.TrainCarriage = TrainCarriage;
             this.Row = Row;
-            this.Code = Code; 
+            this.Code = Code;
             this.SeatType = SeatType;
-
-           
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
 
             TrainCarriage.AddSeat(this);
         }
 
         [Required]
-        public TrainCarriage TrainCarriage { get; private set; }
+        public virtual TrainCarriage TrainCarriage { get; private set; }
         /// <summary>
         /// 座位编号
         /// </summary>
         [Required]
-        [MaxLength(50)]            
+        [MaxLength(50)]
         public string Code { get; private set; }
 
         /// <summary>
@@ -53,7 +47,7 @@ namespace E12306.Domain
         public int Row { get; private set; }
 
         [Required]
-        public SeatTypeConfig SeatType { get; private set; }
+        public virtual SeatTypeConfig SeatType { get; }
 
     }
 

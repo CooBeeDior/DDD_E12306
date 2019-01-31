@@ -81,21 +81,14 @@ namespace E12306.Domain
     {
         protected TrainOrder()
         { }
-        public TrainOrder(TrainStation StartTrainStation, TrainStation EndTrainStation, CustomerInfo CustomerInfo, IList<TrainOrderItem> TrainOrderItems)
-        {
-            Id = Guid.NewGuid();
+        public TrainOrder(TrainStation StartTrainStation, TrainStation EndTrainStation, CustomerInfo CustomerInfo, IList<TrainOrderItem> TrainOrderItems) : base()
+        {  
             this.OrderNo = GenerateOrderNoHelp.GenerateOrderNo();
             this.StartTrainStation = StartTrainStation;
             this.EndTrainStation = EndTrainStation;
             this.CustomerInfo = CustomerInfo;
             this.Status = OrderStatusType.PrePay;
-            this.TrainOrderItems = TrainOrderItems;
-
-
-            AddTime = DateTimeOffset.Now;
-            UpdateTime = DateTimeOffset.Now;
-            AddUserId = UserHelper.User.Id;
-            UpdateUserId = UserHelper.User.Id;
+            this.TrainOrderItems = TrainOrderItems; 
         }
 
         [Required]

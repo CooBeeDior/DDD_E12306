@@ -15,7 +15,7 @@ namespace E12306.Domain
     [Table("TrainNumber")]
     public class TrainNumber : EntityBase
     {
-        protected TrainNumber()
+        private TrainNumber()
         {
 
         }
@@ -40,17 +40,17 @@ namespace E12306.Domain
         }
         [Required]
         [MaxLength(50)]
-        public string Name { get; protected set; }
+        public string Name { get; private set; }
 
         [Required]
         [MaxLength(50)]
-        public string Code { get; protected set; }
+        public string Code { get; private set; }
 
         /// <summary>
         /// 车次类型 
         /// </summary> 
         [Required]
-        public virtual TrainTypeConfig TrainType { get; protected set; }
+        public virtual TrainTypeConfig TrainType { get; private set; }
 
         /// <summary>
         /// 车票价格

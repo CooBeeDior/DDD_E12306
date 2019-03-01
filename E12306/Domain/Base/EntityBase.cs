@@ -20,21 +20,21 @@ namespace E12306.Domain
         }
         [Key]
         [Column(Order = 1)]
-        public virtual Guid Id { get; protected set; }
+        public virtual Guid Id { get; private set; }
 
 
         [Required]
         [Timestamp]
         [Column(Order = 999)]
-        public virtual byte[] Version { get; protected set; }
+        public virtual byte[] Version { get; private set; }
         [Column(Order = 999)]
-        public virtual DateTimeOffset AddTime { get; protected set; }
+        public virtual DateTimeOffset AddTime { get; private set; }
         [Column(Order = 999)]
-        public virtual Guid AddUserId { get; protected set; }
+        public virtual Guid AddUserId { get; private set; }
         [Column(Order = 999)]
-        public virtual DateTimeOffset UpdateTime { get; protected set; }
+        public virtual DateTimeOffset UpdateTime { get; private set; }
         [Column(Order = 999)]
-        public virtual Guid UpdateUserId { get; protected set; }
+        public virtual Guid UpdateUserId { get; private set; }
 
 
         public override bool Equals(object obj)

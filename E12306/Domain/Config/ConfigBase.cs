@@ -21,10 +21,10 @@ namespace E12306.Domain
         }
         [Required]
         [MaxLength(50)]
-        public virtual string Code { get; protected set; }
+        public virtual string Code { get; private set; }
         [Required]
         [MaxLength(50)]
-        public virtual string Name { get; protected set; }
+        public virtual string Name { get; private set; }
 
 
         public override bool Equals(object obj)

@@ -14,7 +14,7 @@ namespace E12306.Domain
     [Table("TrainStation")]
     public class TrainStation : EntityBase
     {
-        protected TrainStation()
+        private TrainStation()
         {
 
         }

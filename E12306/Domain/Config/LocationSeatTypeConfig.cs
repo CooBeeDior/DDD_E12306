@@ -19,7 +19,7 @@ namespace E12306.Domain
     [Table("LocationSeatTypeConfig")]
     public class LocationSeatTypeConfig : ConfigBase
     {
-        protected LocationSeatTypeConfig() : base()
+        private LocationSeatTypeConfig() : base()
         {
 
         }

@@ -16,7 +16,7 @@ namespace E12306.Domain
     [Table("CustomerInfo")]
     public class CustomerInfo : AggregateRoot
     {
-        protected CustomerInfo()
+        private CustomerInfo()
         {
 
         }

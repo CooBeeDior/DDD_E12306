@@ -13,7 +13,7 @@ namespace E12306.Domain
     [Table("Station")]
     public class Station : EntityBase
     {
-        protected Station()
+        private Station()
         {
         }
         public Station(string Code, string Name) : base()

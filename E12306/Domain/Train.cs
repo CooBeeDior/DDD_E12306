@@ -11,7 +11,7 @@ namespace E12306.Domain
     /// <summary>
     /// 火车 实体
     /// </summary>
-    [Table("Train")]   
+    [Table("Train")]
     public class Train : EntityBase
     {
 
@@ -19,23 +19,13 @@ namespace E12306.Domain
         {
         }
 
-        public Train(string Code, IList<TrainCarriage> TrainCarriages) : this(Code, null, TrainCarriages)
-        {           
-
-        }
-
-        public Train(string Code, TrainNumber TrainNumber, IList<TrainCarriage> TrainCarriages) : base()
+        public Train(string Code, IList<TrainCarriage> TrainCarriages)
         {
             this.Code = Code;
-            this.TrainNumber = TrainNumber;
             this.TrainCarriages = TrainCarriages ?? new List<TrainCarriage>();
+        }         
 
-            TrainNumber?.Trains?.Add(this);
-
-        }
-
-        [Required]
-        [ForeignKey("TrainNumberId")]
+ 
         public virtual TrainNumber TrainNumber { get; private set; }
 
         [Required]

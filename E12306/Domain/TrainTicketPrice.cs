@@ -16,11 +16,11 @@ namespace E12306.Domain
     [Table("TrainTicketPrice")]
     public class TrainTicketPrice : EntityBase
     {
-        protected TrainTicketPrice()
+        private TrainTicketPrice()
         {
 
         }
-        public TrainTicketPrice(TrainStation StartTrainStation, TrainStation EndTrainStation, IList<TrainSeatPrice> TrainSeatPrices) : base()
+        public TrainTicketPrice(TrainStation StartTrainStation, TrainStation EndTrainStation, IList<TrainSeatPrice> TrainSeatPrices = null) : base()
         {
             this.StartTrainStation = StartTrainStation;
             this.EndTrainStation = EndTrainStation;
@@ -30,7 +30,7 @@ namespace E12306.Domain
         public virtual TrainStation StartTrainStation { get; private set; }
         //[Required]
         public virtual TrainStation EndTrainStation { get; private set; }
-     
+
         public virtual IList<TrainSeatPrice> TrainSeatPrices { get; private set; }
 
         public void AddTrainSeatPrice(TrainSeatPrice TrainSeatPrice)
@@ -43,10 +43,10 @@ namespace E12306.Domain
         }
 
     }
- 
 
 
- 
+
+
 
 
 

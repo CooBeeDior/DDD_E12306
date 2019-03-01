@@ -14,7 +14,7 @@ namespace E12306.Domain
     [Table("DestinationSeat")]
     public class DestinationSeat : ValueObject<DestinationSeat>
     {
-        protected DestinationSeat()
+        private DestinationSeat()
         {
 
         }

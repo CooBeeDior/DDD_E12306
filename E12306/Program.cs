@@ -22,8 +22,7 @@ namespace E12306
 
         static void Main(string[] args)
         {
-            TestDbContext testDbContex11t = new TestDbContext();
-            var adadaadad = testDbContex11t.CustomerInfos.ToList();
+
             InitEvent();
 
 
@@ -130,7 +129,6 @@ namespace E12306
             IList<Seat> seatsbusiness = new List<Seat>();
             for (int i = 1; i <= 8; i++)
             {
-
                 foreach (var item in locationSeatTypeConfigs)
                 {
                     businessSeatTypeConfig.AddLocationSeatTypeConfig(item);
@@ -201,7 +199,6 @@ namespace E12306
             IList<Seat> seatHardSleep = new List<Seat>();
             for (int i = 1; i <= 10; i++)
             {
-
                 foreach (var item in sleeplocationSeatTypeConfigs)
                 {
                     hardSleepSeatTypeConfig.AddLocationSeatTypeConfig(item);
@@ -219,60 +216,53 @@ namespace E12306
                 var trainStation = new TrainStation(station, i);
                 trainStations.Add(trainStation);
             }
-            //testDbContext.AddRange(trainStations);
+
 
             IList<TrainTicketPrice> trainTicketPrices = new List<TrainTicketPrice>();
             var currentTrainStation = trainStations.FirstOrDefault();
             foreach (var item in trainStations.Skip(1))
             {
-                IList<TrainSeatPrice> trainSeatPrices = new List<TrainSeatPrice>();
+                TrainTicketPrice trainTicketPrice = new TrainTicketPrice(currentTrainStation, item);
 
-                TrainSeatPrice trainSeatPrice = new TrainSeatPrice(oneSeatTypeConfig, 20);
-                trainSeatPrices.Add(trainSeatPrice);
 
-                trainSeatPrice = new TrainSeatPrice(twoSeatTypeConfig, 10);
-                trainSeatPrices.Add(trainSeatPrice);
+                TrainSeatPrice trainSeatPrice = new TrainSeatPrice(trainTicketPrice, oneSeatTypeConfig, 20);
 
-                trainSeatPrice = new TrainSeatPrice(businessSeatTypeConfig, 100);
-                trainSeatPrices.Add(trainSeatPrice);
+                var trainSeatPrice1 = new TrainSeatPrice(trainTicketPrice, twoSeatTypeConfig, 10, true);
 
-                trainSeatPrice = new TrainSeatPrice(softSleepSeatTypeConfig, 80);
-                trainSeatPrices.Add(trainSeatPrice);
 
-                trainSeatPrice = new TrainSeatPrice(hardSleepSeatTypeConfig, 40);
-                trainSeatPrices.Add(trainSeatPrice);
+                var trainSeatPrice2 = new TrainSeatPrice(trainTicketPrice, businessSeatTypeConfig, 100);
 
-                TrainTicketPrice trainTicketPrice = new TrainTicketPrice(currentTrainStation, item, trainSeatPrices);
+
+                var trainSeatPrice3 = new TrainSeatPrice(trainTicketPrice, softSleepSeatTypeConfig, 80);
+
+
+                var trainSeatPrice4 = new TrainSeatPrice(trainTicketPrice, hardSleepSeatTypeConfig, 40);
+
+
                 trainTicketPrices.Add(trainTicketPrice);
                 currentTrainStation = item;
             }
-            //testDbContext.AddRange(trainTicketPrices);
+       
 
             TrainNumber trainNumber = new TrainNumber("G8888", "高铁8888次", GtrainTypeConfig, trainStations, trainTicketPrices, trains);
             DateTimeOffset date = new DateTime(2019, 1, 31);
             TrainShift trainShift = new TrainShift(trainNumber, train, date);
 
             //初始化客户信息
-            CustomerInfo customerInfo = new CustomerInfo("客户1", "18888888888","aa@.com");
+            CustomerInfo customerInfo = new CustomerInfo("客户1", "18888888888", "aa@.com");
             var userContract1 = new UserContract(customerInfo, "张三", "3604031324567835", ContractUserType.Children);
             var userContract2 = new UserContract(customerInfo, "李四", "3604564554545456");
             var userContract11 = new UserContract(customerInfo, "刘六2", "3604564554545454");
-            customerInfo.AddUserContract(userContract1);
-            customerInfo.AddUserContract(userContract2);
-            customerInfo.AddUserContract(userContract11);
-            var order1 = customerInfo.BookTrainTicket(trainShift, trainStations[2], trainStations[5], oneSeatTypeConfig, customerInfo, customerInfo.UserContracts);
+    
+            var order1 = customerInfo.BookTrainTicket(trainShift, trainShift.TrainNumber.TrainStations[2], trainShift.TrainNumber.TrainStations[5], oneSeatTypeConfig, customerInfo, customerInfo.UserContracts);
 
             //初始化客户信息
             CustomerInfo customerInfo1 = new CustomerInfo("客户2", "13655555555", "aa@.com");
             var userContract3 = new UserContract(customerInfo1, "王五", "3604031324567833");
             var userContract4 = new UserContract(customerInfo1, "刘六", "3604564554545454");
-            var userContract41 = new UserContract(customerInfo1, "刘六11", "3604564554545454");
-            var userContract421 = new UserContract(customerInfo1, "刘六22", "3604564554545454");
-            customerInfo1.AddUserContract(userContract3);
-            customerInfo1.AddUserContract(userContract4);
-            customerInfo1.AddUserContract(userContract41);
-            customerInfo1.AddUserContract(userContract421);
-            var order2 = customerInfo1.BookTrainTicket(trainShift, trainStations[7], trainStations[9], oneSeatTypeConfig, customerInfo1, customerInfo1.UserContracts);
+         
+ 
+            var order2 = customerInfo1.BookTrainTicket(trainShift, trainShift.TrainNumber.TrainStations[7], trainShift.TrainNumber.TrainStations[9], oneSeatTypeConfig, customerInfo1, customerInfo1.UserContracts);
 
 
 
@@ -280,18 +270,26 @@ namespace E12306
             var userContract5 = new UserContract(customerInfo2, "徐梦", "3604031324567831");
             var userContract6 = new UserContract(customerInfo2, "刘爽", "3604564554545452");
 
-            var order3 = customerInfo2.BookTrainTicket(trainShift, trainStations[1], trainStations[9], oneSeatTypeConfig, customerInfo2, customerInfo2.UserContracts);
+            var order3 = customerInfo2.BookTrainTicket(trainShift, trainShift.TrainNumber.TrainStations[1], trainShift.TrainNumber.TrainStations[9], oneSeatTypeConfig, customerInfo2, customerInfo2.UserContracts);
 
 
             //ef 持久化数据库  ，TODO使用仓库持久化
             TestDbContext testDbContext = new TestDbContext();
 
-            testDbContext.Add(trainShift);
             testDbContext.Add(order1.Item3);
             testDbContext.Add(order2.Item3);
-            testDbContext.Add(order3.Item3);
             testDbContext.SaveChanges();
-            var ss = testDbContext.CustomerInfos.FirstOrDefault();
+            var adad = testDbContext.TrainOrders.ToList();
+ 
+
+            //testDbContext.Add(order1.Item3);
+            //testDbContext.Add(order2.Item3);
+            //testDbContext.Add(order3.Item3);
+            //testDbContext.SaveChanges();
+            //var ss = testDbContext.CustomerInfos.FirstOrDefault();
+
+            Console.ReadLine();
+
         }
 
 

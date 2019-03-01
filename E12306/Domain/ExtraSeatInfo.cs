@@ -13,7 +13,7 @@ namespace E12306.Domain
     [Table("ExtraSeatInfo")]
     public class ExtraSeatInfo : ValueObject<ExtraSeatInfo>
     {
-        protected ExtraSeatInfo()
+        private ExtraSeatInfo()
         {
 
         }

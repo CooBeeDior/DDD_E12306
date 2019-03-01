@@ -15,7 +15,7 @@ namespace E12306.Domain
     [Table("TrainCarriage")]
     public class TrainCarriage : EntityBase
     {
-        protected TrainCarriage()
+        private TrainCarriage()
         { }
 
         public TrainCarriage(int Order, string Name, CarriageTypeConfig CarriageType) : this(null, Order, Name, CarriageType)

@@ -14,7 +14,7 @@ namespace E12306.Domain
     [Table("UserContract")]
     public class UserContract : EntityBase
     {
-        protected UserContract()
+        private UserContract()
         {
         } 
 

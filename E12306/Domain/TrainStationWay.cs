@@ -14,7 +14,7 @@ namespace E12306.Domain
     [Table("TrainStationWay")]
     public class TrainStationWay : ValueObject<TrainStationWay>
     {
-        protected TrainStationWay()
+        private TrainStationWay()
         {
         }
 

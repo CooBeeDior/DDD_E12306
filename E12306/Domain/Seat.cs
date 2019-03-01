@@ -17,7 +17,7 @@ namespace E12306.Domain
     [Table("Seat")]
     public class Seat : EntityBase
     {
-        protected Seat()
+        private Seat()
         {
         }
         public Seat(TrainCarriage TrainCarriage, int Row, string Code, SeatTypeConfig SeatType) : base()

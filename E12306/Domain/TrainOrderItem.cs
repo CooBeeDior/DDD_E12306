@@ -13,7 +13,7 @@ namespace E12306.Domain
     [Table("TrainOrderItem")]
     public class TrainOrderItem : EntityBase
     {
-        protected TrainOrderItem()
+        private TrainOrderItem()
         {
 
         }

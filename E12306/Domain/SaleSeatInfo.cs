@@ -12,7 +12,7 @@ namespace E12306.Domain
     [Table("SaleSeatInfo")]
     public class SaleSeatInfo : ValueObject<SaleSeatInfo>
     {
-        protected SaleSeatInfo()
+        private SaleSeatInfo()
         {
 
         }

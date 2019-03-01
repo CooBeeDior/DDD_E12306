@@ -6,9 +6,9 @@ namespace E12306.Domain
 {
     public abstract class ValueObject<T> : EntityBase where T : EntityBase
     {
-        public ValueObject():base()
+        protected ValueObject() : base()
         {
-   
+
         }
         public override bool Equals(object obj)
         {

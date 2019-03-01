@@ -13,7 +13,7 @@ namespace E12306.Domain
     [Table("FreezeSeatInfo")]
     public class FreezeSeatInfo : ValueObject<FreezeSeatInfo>
     {
-        protected FreezeSeatInfo()
+        private FreezeSeatInfo()
         {
 
         }

@@ -31,7 +31,7 @@ namespace E12306.Domain
     [Table("SeatTypeConfig")]
     public class SeatTypeConfig : ConfigBase
     {
-        protected SeatTypeConfig() : base()
+        private SeatTypeConfig()
         {
 
         }
@@ -46,7 +46,7 @@ namespace E12306.Domain
             this.LocationSeatTypes = LocationSeatTypes ?? new List<LocationSeatTypeConfig>();
 
         }
- 
+
         public virtual IList<LocationSeatTypeConfig> LocationSeatTypes { get; private set; }
 
         public void AddLocationSeatTypeConfig(LocationSeatTypeConfig LocationSeatType)

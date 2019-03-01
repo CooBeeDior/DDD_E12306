@@ -17,7 +17,7 @@ namespace E12306.Domain
     [Table("TrainShift")]
     public class TrainShift : AggregateRoot
     {
-        protected TrainShift()
+        private TrainShift()
         {
 
         }

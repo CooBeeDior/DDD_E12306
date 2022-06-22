@@ -9,7 +9,7 @@
     <PackageReference Include="Audit.EntityFramework.Core" Version="14.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
